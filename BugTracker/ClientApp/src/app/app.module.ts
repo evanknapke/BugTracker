@@ -18,6 +18,9 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
+// Auth0
+import { AuthModule } from '@auth0/auth0-angular';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -41,7 +44,11 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     MatIconModule,
     MatInputModule,
     MatFormFieldModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule.ɵfac,
+    AuthModule.forRoot({
+      domain: 'tenant13248.us.auth0.com',
+      clientId: 'MCVZ7wqVs9CJ56veSio4jusrbM6PHC7V'
+    }),
   ],
   providers: [],
   bootstrap: [AppComponent]
