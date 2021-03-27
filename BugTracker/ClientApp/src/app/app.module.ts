@@ -20,7 +20,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 // Auth0
 import { AuthModule } from '@auth0/auth0-angular';
-import { AuthButtonComponent } from './login/login.component';
+import { AuthButtonComponent } from './auth/auth.component';
 
 @NgModule({
   declarations: [
