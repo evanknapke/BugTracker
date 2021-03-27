@@ -20,13 +20,15 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 // Auth0
 import { AuthModule } from '@auth0/auth0-angular';
+import { AuthButtonComponent } from './login/login.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavMenuComponent,
     HomeComponent,
-    FetchDataComponent
+    FetchDataComponent,
+    AuthButtonComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -44,7 +46,8 @@ import { AuthModule } from '@auth0/auth0-angular';
     MatIconModule,
     MatInputModule,
     MatFormFieldModule,
-    BrowserAnimationsModule.ɵfac,
+    // BrowserAnimationsModule.ɵfac, // throws errors removed efac... what is efac?
+    BrowserAnimationsModule,
     AuthModule.forRoot({
       domain: 'tenant13248.us.auth0.com',
       clientId: 'MCVZ7wqVs9CJ56veSio4jusrbM6PHC7V'
