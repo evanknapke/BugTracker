@@ -21,6 +21,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 // Auth0
 import { AuthModule } from '@auth0/auth0-angular';
 import { AuthButtonComponent } from './auth/auth.component';
+import { UserProfileComponent } from './profile/profile.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import { AuthButtonComponent } from './auth/auth.component';
     NavMenuComponent,
     HomeComponent,
     FetchDataComponent,
-    AuthButtonComponent
+    AuthButtonComponent,
+    UserProfileComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
