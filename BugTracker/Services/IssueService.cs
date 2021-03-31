@@ -15,9 +15,7 @@ namespace BugTracker.Services
             var client = new MongoClient(settings.ConnectionString);
             var database = client.GetDatabase(settings.DatabaseName);
 
-            _issues = database.GetCollection<IssueItem>(settings.IssuesCollectionName);
-            // _users = database.GetCollection<User>(settings.UsersCollectionName);
-        }
+            _issues = database.GetCollection<IssueItem>(settings.IssuesCollectionName);        }
 
         public List<IssueItem> Get() =>
             _issues.Find(issue => true).ToList();

@@ -38,6 +38,7 @@ namespace BugTracker
             services.AddSingleton<IBugTrackerDBSettings>(sp =>
                 sp.GetRequiredService<IOptions<BugTrackerDBSettings>>().Value);
             
+            services.AddSingleton<UserService>();
             services.AddSingleton<IssueService>();
             
             services.AddControllers()
