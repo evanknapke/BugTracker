@@ -1,10 +1,21 @@
 ﻿<Properties StartupConfiguration="{0495A3E5-349B-4C93-8884-96C8560BDA30}|Default">
-  <MonoDevelop.Ide.ItemProperties.BugTracker PreferredExecutionTarget="/Applications/Safari.app" />
-  <MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.ItemProperties.BugTracker PreferredExecutionTarget="/Applications/Google Chrome.app" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="BugTracker/Properties/launchSettings.json">
+    <Files>
+      <File FileName="BugTracker/Program.cs" Line="16" Column="1" />
+      <File FileName="BugTracker/Startup.cs" Line="1" Column="1" />
+      <File FileName="BugTracker/Properties/launchSettings.json" Line="1" Column="1" />
+    </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
-          <Node name="BugTracker" expanded="True" />
+          <Node name="BugTracker" expanded="True">
+            <Node name="BugTracker" expanded="True">
+              <Node name="Properties" expanded="True">
+                <Node name="launchSettings.json" selected="True" />
+              </Node>
+            </Node>
+          </Node>
         </State>
       </Pad>
     </Pads>
