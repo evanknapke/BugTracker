@@ -1,12 +1,15 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.EntityFrameworkCore;
 using BugTracker.Models;
+using BugTracker.Services;
+using Microsoft.Extensions.Options;
+
+using System;
+
 
 namespace BugTracker
 {
@@ -22,9 +25,24 @@ namespace BugTracker
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<IssueContext>(opt =>
-                                               opt.UseInMemoryDatabase("IssueList"));
-            services.AddControllers(); // from tutorial
+            // Setup Database
+            services.Configure<BugTrackerDBSettings>(
+                Configuration.GetSection(nameof(BugTrackerDBSettings)));
+            
+            services.Configure<BugTrackerDBSettings>(settings =>
+            {
+                settings.DatabaseName = "bugtracker-db";
+                settings.ConnectionString = Configuration["MongoDB:ConnectionString"];
+            });
+            
+            services.AddSingleton<IBugTrackerDBSettings>(sp =>
+                sp.GetRequiredService<IOptions<BugTrackerDBSettings>>().Value);
+            
+            services.AddSingleton<IssueService>();
+            
+            services.AddControllers()
+                .AddNewtonsoftJson(options => options.UseMemberCasing());;
+
             // services.AddControllersWithViews();
             // // In production, the Angular files will be served from this directory
             // services.AddSpaStaticFiles(configuration =>

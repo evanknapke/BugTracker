@@ -1,14 +1,6 @@
-using System;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MongoDB.Driver;
 using BugTracker.Models;
-
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
+using BugTracker.Services;
 
 namespace BugTracker.Controllers
 {
@@ -16,142 +8,73 @@ namespace BugTracker.Controllers
     [ApiController]
     public class IssuesController : ControllerBase
     {
-        private readonly IssueContext _context;
+        private readonly IssueService _issueService;
 
-        public IssuesController(IssueContext context)
+        public IssuesController(IssueService issueService)
         {
-            _context = context;
+            _issueService = issueService;
         }
 
-    // GET: api/IssueItems
-    [HttpGet]
-    public async Task<ActionResult<IEnumerable<IssueItemDTO>>> GetIssueItems()
-    {
-        return await _context.IssueItems
-            .Select(x => ItemToDTO(x))
-            .ToListAsync();
-    }
+        // GET: api/IssueItems
+        // [HttpGet]
+        // public async Task<ActionResult<IEnumerable<IssueItemDTO>>> GetIssueItems()
+        // {
+        //     return await _context.IssueItems
+        //         .Select(x => ItemToDTO(x))
+        //         .ToListAsync();
+        // }
 
-    [HttpGet("{id}")]
-    public async Task<ActionResult<IssueItemDTO>> GetIssueItem(long id)
-    {
-        var issueItem = await _context.IssueItems.FindAsync(id);
-
-        if (issueItem == null)
+        [HttpGet("{id:length(24)}", Name = "GetIssue")]
+        public ActionResult<IssueItem> Get(string id)
         {
-            return NotFound();
+            var issueItem = _issueService.Get(id);
+
+            if (issueItem == null)
+            {
+                return NotFound();
+            }
+
+            return issueItem;
         }
 
-        return ItemToDTO(issueItem);
-    }
-
-    [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateIssueItem(long id, IssueItemDTO issueItemDTO)
-    {
-        if (id != issueItemDTO.Id)
+        [HttpPut("{id:length(24)}")]
+        public IActionResult Update(string id, IssueItem issueItemIn)
         {
-            return BadRequest();
+            var issueItem = _issueService.Get(id);
+            if (issueItem == null)
+            {
+                return NotFound();
+            }
+
+            _issueService.Update(id, issueItemIn);
+
+            return NoContent();
         }
 
-        var issueItem = await _context.IssueItems.FindAsync(id);
-        if (issueItem == null)
+        [HttpPost]
+        public ActionResult<IssueItem> Create(IssueItem issueItem)
         {
-            return NotFound();
+            _issueService.Create(issueItem);
+            
+            return CreatedAtRoute(
+                "GetIssue",
+                new { id = issueItem.Id.ToString() },
+                issueItem);
         }
 
-        issueItem.CardName = issueItemDTO.CardName;
-        issueItem.IssueText = issueItemDTO.IssueText;
-
-        try
+        [HttpDelete("{id:length(24)}")]
+        public IActionResult Delete(string id)
         {
-            await _context.SaveChangesAsync();
+            var issueItem = _issueService.Get(id);
+
+            if (issueItem == null)
+            {
+                return NotFound();
+            }
+
+            _issueService.Remove(issueItem.Id);
+
+            return NoContent();
         }
-        catch (DbUpdateConcurrencyException) when (!IssueItemExists(id))
-        {
-            return NotFound();
-        }
-
-        return NoContent();
-    }
-
-    [HttpPost]
-    public async Task<ActionResult<IssueItemDTO>> CreateIssueItem(IssueItemDTO issueItemDTO)
-    {
-        var issueItem = new IssueItem
-        {
-            IssueText = issueItemDTO.IssueText,
-            CardName = issueItemDTO.CardName
-        };
-
-        _context.IssueItems.Add(issueItem);
-        await _context.SaveChangesAsync();
-
-        return CreatedAtAction(
-            nameof(GetIssueItem),
-            new { id = issueItem.Id },
-            ItemToDTO(issueItem));
-    }
-
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteIssueItem(long id)
-    {
-        var issueItem = await _context.IssueItems.FindAsync(id);
-
-        if (issueItem == null)
-        {
-            return NotFound();
-        }
-
-        _context.IssueItems.Remove(issueItem);
-        await _context.SaveChangesAsync();
-
-        return NoContent();
-    }
-
-    private bool IssueItemExists(long id) =>
-        _context.IssueItems.Any(e => e.Id == id);
-
-    private static IssueItemDTO ItemToDTO(IssueItem issueItem) =>
-        new IssueItemDTO
-        {
-            Id = issueItem.Id,
-            CardName = issueItem.CardName,
-            IssueText = issueItem.IssueText
-        };
     }
 }
-
-
-
-
-// namespace BugTracker.Contollers
-// {
-//     [Route("api/[controller]")]
-//     [ApiController]
-//     public class IssuesController : ControllerBase
-//     {
-//         static void Main(string[] args)
-//         {
-//             // DO NOT COMMIT UNTIL MOVE PASSSWORD TO SECRETS: 3y6MuZCQ-ySbmj!
-//             MongoClient dbClient = new MongoClient("mongodb+srv://user:3y6MuZCQ-ySbmj!@bugtrackerdb.zy5oo.mongodb.net/?retryWrites=true&w=majority");
-
-//             var dbList = dbClient.ListDatabases().ToList();
-
-//             Console.WriteLine("The list of databases on this server is: ");
-//             foreach (var db in dbList)
-//             {
-//                 Console.WriteLine(db);
-//             }
-//         }
-//     }
-// }
-
-// MongoClient dbClient = new MongoClient("mongodb+srv://user:3y6MuZCQ-ySbmj!@bugtrackerdb.zy5oo.mongodb.net/?retryWrites=true&w=majority");
-
-// var dbList = dbClient.ListDatabases().ToList();
-
-// Console.WriteLine("The list of databases on this server is: ");
-// foreach (var db in dbList)
-// {
-//     Console.WriteLine(db);
-// }
