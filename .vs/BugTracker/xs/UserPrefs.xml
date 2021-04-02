@@ -1,9 +1,9 @@
 ﻿<Properties StartupConfiguration="{0495A3E5-349B-4C93-8884-96C8560BDA30}|Default">
-  <MonoDevelop.Ide.ItemProperties.BugTracker PreferredExecutionTarget="/Applications/Safari.app" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="BugTracker/Program.cs">
+  <MonoDevelop.Ide.ItemProperties.BugTracker PreferredExecutionTarget="/Applications/Google Chrome.app" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="BugTracker/Services/IssueService.cs">
     <Files>
-      <File FileName="BugTracker/Services/IssueService.cs" Line="15" Column="1" />
-      <File FileName="BugTracker/Program.cs" Line="16" Column="1" />
+      <File FileName="BugTracker/Services/IssueService.cs" Line="33" Column="1" />
+      <File FileName="BugTracker/Program.cs" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
@@ -11,14 +11,12 @@
           <Node name="BugTracker" expanded="True">
             <Node name="BugTracker" expanded="True">
               <Node name="Properties" expanded="True" />
-              <Node name="Services" expanded="True" />
-              <Node name="Program.cs" selected="True" />
+              <Node name="Services" expanded="True">
+                <Node name="IssueService.cs" selected="True" />
+              </Node>
             </Node>
           </Node>
         </State>
-      </Pad>
-      <Pad Id="MonoDevelop.Debugger.WatchPad">
-        <State />
       </Pad>
     </Pads>
   </MonoDevelop.Ide.Workbench>

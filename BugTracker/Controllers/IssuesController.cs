@@ -1,11 +1,13 @@
 using Microsoft.AspNetCore.Mvc;
 using BugTracker.Models;
 using BugTracker.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BugTracker.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class IssuesController : ControllerBase
     {
         private readonly IssueService _issueService;

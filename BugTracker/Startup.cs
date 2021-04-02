@@ -7,8 +7,10 @@ using Microsoft.Extensions.Hosting;
 using BugTracker.Models;
 using BugTracker.Services;
 using Microsoft.Extensions.Options;
-
-using System;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 
 namespace BugTracker
@@ -25,6 +27,27 @@ namespace BugTracker
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // // Setup JWT
+            // services.Configure<JWTSettings>(Configuration.GetSection("JWTSettings"));
+
+            // services.AddEntityFrameworkSqlServer()
+            //   .AddDbContext<UserService>(opt => opt.UseNpgsql(Configuration["MongoDB:ConnectionString"]));
+
+            // services.AddIdentity<IdentityUser, IdentityRole>()
+            //   .AddEntityFrameworkStores<UserDbContext>();
+
+            // auth0 Authentication
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(options =>
+            {
+                options.Authority = $"https://{Configuration["Auth0:Domain"]}/";
+                options.Audience = Configuration["Auth0:Audience"];
+            });
+            services.AddControllers();
+
             // Setup Database
             services.Configure<BugTrackerDBSettings>(
                 Configuration.GetSection(nameof(BugTrackerDBSettings)));
@@ -74,6 +97,21 @@ namespace BugTracker
             }
 
             app.UseRouting();
+            
+            // auth0 Authentication
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
+
+            app.UseHttpsRedirection();
+            app.UseRouting();
+            app.UseAuthentication();
+            app.UseAuthorization();
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
 
             // app.UseAuthentication();
             // app.UseAuthorization();
